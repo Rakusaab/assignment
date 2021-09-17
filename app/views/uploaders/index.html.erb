@@ -1,4 +1,4 @@
-<div class="container">   
+<div class="container text-left">   
 
   
 <br>   
@@ -30,7 +30,7 @@
                <tr>   
                   <td><%= uploader.title %></td>   
                   <td><%=  uploader.description %></td>   
-                  <td><a onclick="CopyClip()" class="copy" style="cursor:pointer" data="<%=  root_url + uploader.attachment_url %>"> Share </a>  <%= link_to "Delete",  uploader, method: :delete %> </td>   
+                  <td><a class="CopyClip" style="cursor:pointer" data="<%=  root_url + uploader.attachment_url %>"> Share </a>  <%= link_to "Delete",  uploader, method: :delete %> </td>   
                </tr>  
                
          <% end %>   
@@ -42,11 +42,11 @@
 </table>   
 </div> 
 <script type="text/javascript">
-function CopyClip(){
-   var  copyText = $(".copy").attr('data')
+$( ".table" ).on( "click",".CopyClip", function() {
+   var  copyText = $(this).attr("data");
 
    alert("Please copy the URL to Share: " + copyText);
-}
+         })
 $('.tags').click(function(){
    var  tag = $(this).attr('data')
    $.ajax({
@@ -67,7 +67,7 @@ $('.tags').click(function(){
                divsToAppend += '<tr>';
                divsToAppend += '<td>' + response[i].title + ' </td>';
                divsToAppend += '<td>' + response[i].description + ' </td>';
-               divsToAppend += '<td><a onclick="CopyClip()" class="copy" style="cursor:pointer" data="<%=  root_url %>'+ response[i].attachment.url +'"> Share </a>  <a rel="nofollow" data-method="delete" href="'+ response[i].id + '">Delete</a> </td>';
+               divsToAppend += '<td><a class="CopyClip" style="cursor:pointer" data="<%=  root_url %>'+ response[i].attachment.url +'"> Share </a>  <a rel="nofollow" data-method="delete" href="'+ response[i].id + '">Delete</a> </td>';
                divsToAppend += '</tr>';
             }
             $( ".append_here" ).html(divsToAppend);
