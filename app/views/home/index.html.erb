@@ -1,0 +1,7 @@
+<% name = current_user.present? ? current_user.email : 'Stranger' %>
+<h1>Welcome, <b><%= name %></b> </h1>
+<% if current_user.present? %>
+<%= link_to "My File List", uploaders_path %>   
+<% else %>
+<h5> You are not signed in yet! </h5>
+<% end %>

@@ -1,0 +1,81 @@
+<div class="container">   
+
+  
+<br>   
+  
+<%= link_to "Create New", new_uploader_path %>   
+<br>   
+<br>   
+  
+<table border="3" class="table">   
+<% if @uploaders.present? %>
+<h2> My Files </h2>
+<h4> Find By Tags</h4><span> Click on any tag to get data</span>
+<% if @concatenated.present? %>
+   <% @concatenated.each do |tag| %>
+      <a style="margin:15px; font-size: 20px; cursor:pointer" class="tags" data="<%= tag %>"><span class="badge badge-primary"><%= tag %></span></a>
+   <% end %>
+<% end %>
+      <thead>   
+         <tr>   
+            <th>Title</th>   
+            <th>Description</th>   
+            <th>Action</th>   
+         </tr>   
+      </thead>   
+         
+      <tbody class="append_here">   
+      
+         <% @uploaders.each do |uploader| %>   
+               <tr>   
+                  <td><%= uploader.title %></td>   
+                  <td><%=  uploader.description %></td>   
+                  <td><a onclick="CopyClip()" class="copy" style="cursor:pointer" data="<%=  root_url + uploader.attachment_url %>"> Share </a>  <%= link_to "Delete",  uploader, method: :delete %> </td>   
+               </tr>  
+               
+         <% end %>   
+      
+      </tbody>   
+   <% else %>
+   <h3> No Record Found! </h3>   
+   <% end %> 
+</table>   
+</div> 
+<script type="text/javascript">
+function CopyClip(){
+   var  copyText = $(".copy").attr('data')
+
+   alert("Please copy the URL to Share: " + copyText);
+}
+$('.tags').click(function(){
+   var  tag = $(this).attr('data')
+   $.ajax({
+      type: "POST",
+      url: "/uploaders/filter",
+      dataType: "json",
+      data: { tag: tag },
+      beforeSend: function(){
+      },
+      complete: function(res){
+         var divsToAppend = ''
+         var response = res.responseJSON
+         if(response.length > 0){
+            var last_id = ''
+            for(i = 0; i < response.length; i++) {
+               
+               console.log(i)
+               divsToAppend += '<tr>';
+               divsToAppend += '<td>' + response[i].title + ' </td>';
+               divsToAppend += '<td>' + response[i].description + ' </td>';
+               divsToAppend += '<td><a onclick="CopyClip()" class="copy" style="cursor:pointer" data="<%=  root_url %>'+ response[i].attachment.url +'"> Share </a>  <a rel="nofollow" data-method="delete" href="'+ response[i].id + '">Delete</a> </td>';
+               divsToAppend += '</tr>';
+            }
+            $( ".append_here" ).html(divsToAppend);
+            }else{
+            $( ".append_here" ).html("Sorry No data found with this tag!");
+
+         }
+      }
+   });
+})
+</script>
